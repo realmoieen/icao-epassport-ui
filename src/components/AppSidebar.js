@@ -1,21 +1,22 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import {
   CCloseButton,
+  CImage,
   CSidebar,
   CSidebarBrand,
   CSidebarFooter,
   CSidebarHeader,
   CSidebarToggler,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 
 import { AppSidebarNav } from './AppSidebarNav'
 
-import { logo } from 'src/assets/brand/logo'
-import { sygnet } from 'src/assets/brand/sygnet'
-
+import IdenfoPurpleYellow from 'src/assets/images/idenfo_purple_yellow.png'
+// import IdenfoPurpleWhite from 'src/assets/images/idenfo_purple_white.png'
+// import IdenfoCircleBlack from 'src/assets/images/idenfo_circle_black.png'
+import IdenfoCircleWhite from 'src/assets/images/idenfo_circle_white.png'
 // sidebar nav config
 import navigation from '../_nav'
 
@@ -37,8 +38,18 @@ const AppSidebar = () => {
     >
       <CSidebarHeader className="border-bottom">
         <CSidebarBrand to="/">
-          <CIcon customClassName="sidebar-brand-full" icon={logo} height={32} />
-          <CIcon customClassName="sidebar-brand-narrow" icon={sygnet} height={32} />
+          <CImage
+            className="sidebar-brand-full"
+            alt={'Idenfo'}
+            src={IdenfoPurpleYellow}
+            height={45}
+          />
+          <CImage
+            className="sidebar-brand-narrow"
+            alt={'Idenfo Circle'}
+            src={IdenfoCircleWhite}
+            height={32}
+          />
         </CSidebarBrand>
         <CCloseButton
           className="d-lg-none"

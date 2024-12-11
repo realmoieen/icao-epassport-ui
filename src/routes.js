@@ -1,8 +1,16 @@
 import React from 'react'
+import Mode from 'src/utils/Mode'
+// import UserForm from 'src/views/users/UserForm'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
 const Typography = React.lazy(() => import('./views/theme/typography/Typography'))
+
+//users
+const ListUsers = React.lazy(() => import('./views/users/ListUsers'))
+const CreateUser = React.lazy(() => import('./views/users/UserForm'))
+const ViewUser = React.lazy(() => import('./views/users/UserForm'))
+const EditUser = React.lazy(() => import('./views/users/UserForm'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -54,8 +62,11 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/theme', name: 'Theme', element: Colors, exact: true },
-  { path: '/theme/colors', name: 'Colors', element: Colors },
+  { path: '/system', name: 'System', element: ListUsers, exact: true },
+  { path: '/system/users', name: 'Users', element: ListUsers },
+  { path: '/system/users/create', name: 'Create New User', element: CreateUser, mode: Mode.INSERT },
+  { path: '/system/users/view/:userId', name: 'View User', element: ViewUser, mode: Mode.VIEW },
+  { path: '/system/users/edit/:userId', name: 'Edit User', element: EditUser, mode: Mode.EDIT },
   { path: '/theme/typography', name: 'Typography', element: Typography },
   { path: '/base', name: 'Base', element: Cards, exact: true },
   { path: '/base/accordion', name: 'Accordion', element: Accordion },

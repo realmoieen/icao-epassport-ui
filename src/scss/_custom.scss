@@ -1,1 +1,26 @@
 // Here you can add other styles
+.center-align{
+  text-align: center;
+}
+.display-flex{
+  display: flex;
+}
+.dashboard-block{
+  display: flex;
+}
+
+.dashboard-child-block{
+  width: 50%;
+  text-align: left;
+}
+.dashboard-block > * {
+  margin-top: 15px;
+}
+
+.dashboard-child-block > *:first-child {
+  margin-top: 0px;
+}
+
+.item-per-page-size {
+  width: fit-content;
+}

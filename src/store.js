@@ -1,4 +1,5 @@
 import { legacy_createStore as createStore } from 'redux'
+import authReducer from './reducers/authReducer'
 
 const initialState = {
   sidebarShow: true,
@@ -14,5 +15,5 @@ const changeState = (state = initialState, { type, ...rest }) => {
   }
 }
 
-const store = createStore(changeState)
+const store = createStore(authReducer)
 export default store

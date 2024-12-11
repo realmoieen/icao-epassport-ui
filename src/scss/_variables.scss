@@ -3,3 +3,20 @@
 // If you want to customize your project please add your variables below.
 
 $enable-deprecation-messages: false !default;
+
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: local('Montserrat-Light'), url('../assets/fonts/Montserrat/Montserrat-Light.ttf') format('ttf');
+  /* other formats include: 'woff2', 'truetype, 'opentype',
+                            'embedded-opentype', and 'svg' */
+}
+
+
+$primary: #9959A5;
+$sidebar-bg: #2F1B3E ;
+$sidebar-nav-link-active-bg: #9959A5 ;
+$sidebar-nav-link-hover-bg: #9959A5;
+$bg-info: #FFC600;
+
+$dark-danger: #671414;
+//$font-family-base: 'Montserrat-Light'
