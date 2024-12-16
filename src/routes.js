@@ -1,5 +1,6 @@
 import React from 'react'
 import Mode from 'src/utils/Mode'
+
 // import UserForm from 'src/views/users/UserForm'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -11,6 +12,7 @@ const ListUsers = React.lazy(() => import('./views/users/ListUsers'))
 const CreateUser = React.lazy(() => import('./views/users/UserForm'))
 const ViewUser = React.lazy(() => import('./views/users/UserForm'))
 const EditUser = React.lazy(() => import('./views/users/UserForm'))
+const DeleteUser = React.lazy(() => import('./views/users/DeleteUser'))
 
 // Base
 const Accordion = React.lazy(() => import('./views/base/accordion/Accordion'))
@@ -29,6 +31,11 @@ const Tabs = React.lazy(() => import('./views/base/tabs/Tabs'))
 const Tables = React.lazy(() => import('./views/base/tables/Tables'))
 const Tooltips = React.lazy(() => import('./views/base/tooltips/Tooltips'))
 
+// trusted authorities
+const TaList = React.lazy(() => import('./views/trusted-authorities/TaList'))
+const CreateTa = React.lazy(() => import('./views/trusted-authorities/TaForm'))
+const ViewTa = React.lazy(() => import('./views/trusted-authorities/TaForm'))
+const EditTa = React.lazy(() => import('./views/trusted-authorities/TaForm'))
 // Buttons
 const Buttons = React.lazy(() => import('./views/buttons/buttons/Buttons'))
 const ButtonGroups = React.lazy(() => import('./views/buttons/button-groups/ButtonGroups'))
@@ -67,6 +74,31 @@ const routes = [
   { path: '/system/users/create', name: 'Create New User', element: CreateUser, mode: Mode.INSERT },
   { path: '/system/users/view/:userId', name: 'View User', element: ViewUser, mode: Mode.VIEW },
   { path: '/system/users/edit/:userId', name: 'Edit User', element: EditUser, mode: Mode.EDIT },
+  {
+    path: '/system/users/delete/:userId',
+    name: 'Delete User',
+    element: DeleteUser,
+    mode: Mode.DELETE,
+  },
+  { path: '/system/trusted-authorities', name: 'Trusted Authorities', element: TaList },
+  {
+    path: '/system/trusted-authorities/create',
+    name: 'Create New TA',
+    element: CreateTa,
+    mode: Mode.INSERT,
+  },
+  {
+    path: '/system/trusted-authorities/view/:taId',
+    name: 'View TA',
+    element: ViewTa,
+    mode: Mode.VIEW,
+  },
+  {
+    path: '/system/trusted-authorities/edit/:taId',
+    name: 'Edit TA',
+    element: EditTa,
+    mode: Mode.EDIT,
+  },
   { path: '/theme/typography', name: 'Typography', element: Typography },
   { path: '/base', name: 'Base', element: Cards, exact: true },
   { path: '/base/accordion', name: 'Accordion', element: Accordion },

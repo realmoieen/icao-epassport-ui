@@ -23,7 +23,7 @@ import navigation from '../_nav'
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const sidebarShow = useSelector((state) => state.theme.sidebarShow)
 
   return (
     <CSidebar

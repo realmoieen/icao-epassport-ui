@@ -1,17 +1,18 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SmartTable from 'src/components/SmartTable'
 import { useNavigate } from 'react-router-dom'
 import { CButton, CCol, CContainer, CRow } from '@coreui/react'
+import axiosInstance from '../../utils/axiosInstance'
 
-const ListUsers = () => {
+const TaList = () => {
   const navigate = useNavigate()
   const handleCancel = () => {
     navigate('/system/users')
   }
   const userColumns = [
-    { key: 'userId', label: 'User ID' },
+    { key: 'id', label: 'ID' },
     { key: 'status', label: 'Status' },
-    { key: 'roleName', label: 'Role Name' },
+    { key: 'subjectDN', label: 'Subject DN' },
     { key: 'createdBy', label: 'Created By' },
     { key: 'createAt', label: 'Created At' },
     // { key: 'lastModifiedBy', label: 'Last Modified By' },
@@ -20,37 +21,46 @@ const ListUsers = () => {
       key: 'actions',
       label: 'Actions',
       actions: [
-        { label: 'View', link: (row) => `/system/users/view/${row.userId}` },
-        { label: 'Edit', link: (row) => `/system/users/edit/${row.userId}` },
-        { label: 'Delete', link: (row) => `/system/users/delete/${row.userId}` },
+        { label: 'View', link: (row) => `/system/trusted-authorities/view/${row.id}` },
+        { label: 'Edit', link: (row) => `/system/trusted-authorities/edit/${row.id}` },
       ],
     },
   ]
   // Handler for creating a new user
   const handleCreateNew = () => {
-    navigate('/system/users/create')
+    navigate('/system/trusted-authorities/create')
   }
+
+  const getData = async () => {
+    const response = await axiosInstance.get('/api/ta/')
+    const data = response.data
+    console.log(data)
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
 
   return (
     <CContainer>
       <CRow className="mb-3">
         <CCol className="d-flex justify-content-end">
           <CButton color="primary" onClick={handleCreateNew}>
-            Create New User
+            Create New TA
           </CButton>
         </CCol>
       </CRow>
       <SmartTable
-        heading="List of Users"
-        url="/api/users"
+        heading="List of Trusted Authorities"
+        url="/api/ta/"
         columns={userColumns}
         // actions={actions}
         defaultPageSize={10}
         searchParam="search"
-        dataType="user"
+        dataType="ta"
       />
     </CContainer>
   )
 }
 
-export default ListUsers
+export default TaList

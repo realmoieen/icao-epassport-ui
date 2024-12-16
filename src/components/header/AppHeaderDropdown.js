@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   CDropdown,
   CDropdownDivider,
@@ -12,9 +12,28 @@ import { cilAccountLogout, cilSettings, cilUser } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { useToaster } from 'src/services/ToasterService'
 import axiosInstance from 'src/utils/axiosInstance'
+import { useSelector } from 'react-redux'
 
 const AppHeaderDropdown = () => {
+  const { user } = useSelector((state) => state.user)
   const { addToast, handleError } = useToaster()
+  // const [username, setUsername] = React.useState('')
+  const username = localStorage.getItem('username').trim()
+
+  const getUser = async () => {
+    try {
+      const response = await axiosInstance.get(`/auth/user/${user}`)
+      if (response) {
+        setUsername(response.data.username)
+      }
+    } catch (error) {
+      throw new error()
+    }
+  }
+
+  // useEffect(() => {
+  //   getUser()
+  // }, [user])
 
   const logout = async () => {
     try {
@@ -31,11 +50,26 @@ const AppHeaderDropdown = () => {
   }
   return (
     <CDropdown variant="nav-item">
-      <CDropdownToggle placement="bottom-end" className="py-0 pe-0" caret={false}>
-        {/*<CAvatar src={avatar8} size="md" />*/}
-        <CIcon icon={cilUser} />
-        <CFormLabel>Superadmin</CFormLabel>
-      </CDropdownToggle>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          // backgroundColor: 'red',
+          gap: '10px',
+          height: '100%',
+        }}
+      >
+        <CDropdownToggle
+          placement="bottom-end"
+          className="py-0 pe-2"
+          caret={false}
+        >
+          {/*<CAvatar src={avatar8} size="md" />*/}
+          <CIcon icon={cilUser} />
+          <CFormLabel>{username}</CFormLabel>
+        </CDropdownToggle>
+      </div>
       <CDropdownMenu className="pt-0" placement="bottom-end">
         {/*<CDropdownHeader className="bg-body-secondary fw-semibold mb-2">Account</CDropdownHeader>*/}
         {/*<CDropdownItem href="#">*/}

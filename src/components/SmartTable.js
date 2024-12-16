@@ -27,7 +27,15 @@ import { cilOptions } from '@coreui/icons'
 import { AxiosError } from 'axios'
 import { useToaster } from 'src/services/ToasterService'
 
-const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam = 'search' }) => {
+const SmartTable = ({
+  url,
+  columns,
+  actions,
+  defaultPageSize = 10,
+  searchParam = 'search',
+  heading,
+  dataType,  // Added dataType prop to distinguish between 'user' and 'ta'
+}) => {
   const { addToast } = useToaster()
   const [data, setData] = useState([])
   const [totalPages, setTotalPages] = useState(0)
@@ -87,10 +95,25 @@ const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam =
     window.location.href = link
   }
 
+  // Dynamically determine which field to filter based on dataType ('user' or 'ta')
+  const filterField = dataType === 'user' ? 'userId' : 'id'
+
+  const filterData = data.filter((item) => {
+    return String(item[filterField]).toLowerCase().includes(searchTerm.toLowerCase())
+  })
+
+  // Conditionally define columns for 'user' vs 'ta'
+  const filteredColumns = columns.map((col) => {
+    if (dataType === 'ta' && col.key === 'roleName') {
+      col.key = 'subjectdn' // Replace 'roleName' with 'subjectdn' for 'ta' data
+    }
+    return col
+  })
+
   return (
     <CCard>
       <CCardHeader>
-        <strong>Users List</strong>
+        <strong>{heading}</strong>
       </CCardHeader>
       <CCardBody>
         <CFormInput
@@ -100,24 +123,10 @@ const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam =
           onChange={handleSearch}
         />
 
-        {/*{error && (*/}
-        {/*  <CToast*/}
-        {/*    autohide={true}*/}
-        {/*    visible={error}*/}
-        {/*    color="primary"*/}
-        {/*    className="text-white align-items-center"*/}
-        {/*  >*/}
-        {/*    <div className="d-flex">*/}
-        {/*      <CToastBody>{error}</CToastBody>*/}
-        {/*      <CToastClose className="me-2 m-auto" white />*/}
-        {/*    </div>*/}
-        {/*  </CToast>*/}
-        {/*)}*/}
-
         <CTable className="table" hover>
           <CTableHead>
             <CTableRow color={'light'}>
-              {columns.map((col) => (
+              {filteredColumns.map((col) => (
                 <CTableHeaderCell key={col.key} onClick={() => handleSort(col.key)}>
                   {col.label} {sortField === col.key ? (sortDirection === 'asc' ? '▲' : '▼') : ''}
                 </CTableHeaderCell>
@@ -127,14 +136,13 @@ const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam =
           </CTableHead>
           <CTableBody>
             {data.length > 0 ? (
-              data.map((item, index) => (
+              filterData.map((item, index) => (
                 <CTableRow key={index}>
-                  {columns.map((col) =>
+                  {filteredColumns.map((col) =>
                     col.key !== 'actions' ? (
                       <CTableDataCell key={col.key}>{item[col.key]}</CTableDataCell>
                     ) : (
-                      // eslint-disable-next-line react/jsx-key
-                      <CTableDataCell>
+                      <CTableDataCell key={col.key}>
                         <CDropdown>
                           <CDropdownToggle color="primary">
                             <CIcon icon={cilOptions}></CIcon>
@@ -152,13 +160,13 @@ const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam =
                           </CDropdownMenu>
                         </CDropdown>
                       </CTableDataCell>
-                    ),
+                    )
                   )}
                 </CTableRow>
               ))
             ) : (
               <CTableRow>
-                <CTableDataCell colSpan={columns.length}>
+                <CTableDataCell colSpan={filteredColumns.length}>
                   <div className="d-flex justify-content-center">
                     <CSpinner color={'primary'} hidden={!loading} />
                   </div>
@@ -168,6 +176,7 @@ const SmartTable = ({ url, columns, actions, defaultPageSize = 10, searchParam =
             )}
           </CTableBody>
         </CTable>
+
         <div>
           <CFormSelect
             label={'Items per page:'}
@@ -199,5 +208,7 @@ SmartTable.propTypes = {
   defaultPageSize: PropTypes.number,
   searchParam: PropTypes.string,
   url: PropTypes.string,
+  dataType: PropTypes.oneOf(['user', 'ta']), // dataType is passed as a prop to distinguish user and ta data
 }
+
 export default SmartTable

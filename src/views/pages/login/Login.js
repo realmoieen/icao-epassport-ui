@@ -23,8 +23,11 @@ import LocalStorageService, {
   REFRESH_TOKEN_KEY,
 } from 'src/services/localStorageService'
 import IdenfoPurpleYellow from 'src/assets/images/idenfo_purple_yellow.png'
+import { useDispatch } from 'react-redux'
+import { setUser } from '../../../actions/userActions'
 
 const Login = () => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
@@ -53,6 +56,8 @@ const Login = () => {
         // Store tokens in local storage
         LocalStorageService.setItem(ACCESS_TOKEN_KEY, accessToken)
         LocalStorageService.setItem(REFRESH_TOKEN_KEY, refreshToken)
+        localStorage.setItem('username', username.trim())
+        // dispatch(setUser(username))
 
         // Redirect to dashboard
         navigate('/dashboard')
