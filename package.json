@@ -16,7 +16,7 @@
     "build": "vite build --base=/idenfo/ui",
     "lint": "eslint \"src/**/*.js\"",
     "serve": "vite preview",
-    "start": "vite --base=/idenfo/ui"
+    "start": "vite"
   },
   "dependencies": {
     "@coreui/chartjs": "^4.0.0",
