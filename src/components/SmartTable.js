@@ -19,6 +19,12 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
+  CModal,
+  CModalFooter,
+  CModalTitle,
+  CModalHeader,
+  CModalBody,
+  CButton
 } from '@coreui/react'
 import axiosInstance from 'src/utils/axiosInstance'
 import PropTypes from 'prop-types'
@@ -27,6 +33,14 @@ import { cilOptions } from '@coreui/icons'
 import { AxiosError } from 'axios'
 import { useToaster } from 'src/services/ToasterService'
 
+// const cellStyle = {
+//   width: '150px', // Fixed width for all cells
+//   whiteSpace: 'nowrap', // Prevent wrapping
+//   overflow: 'hidden', // Hide overflow content
+//   textOverflow: 'ellipsis',
+//   backgrooundColor: 'red' // Add ellipsis for overflowed content
+// }
+
 const SmartTable = ({
   url,
   columns,
@@ -34,7 +48,7 @@ const SmartTable = ({
   defaultPageSize = 10,
   searchParam = 'search',
   heading,
-  dataType,  // Added dataType prop to distinguish between 'user' and 'ta'
+  dataType, // Added dataType prop to distinguish between 'user' and 'ta'
 }) => {
   const { addToast } = useToaster()
   const [data, setData] = useState([])
@@ -46,6 +60,7 @@ const SmartTable = ({
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [showModal, setShowModal] = useState(false)
 
   const fetchData = async () => {
     setLoading(true)
@@ -74,7 +89,7 @@ const SmartTable = ({
 
   useEffect(() => {
     fetchData()
-  }, [currentPage, pageSize, sortField, sortDirection, searchTerm])
+  }, [currentPage, pageSize, sortField, sortDirection, searchTerm, window.location.href])
 
   const handleSort = (field) => {
     setSortField(field)
@@ -157,10 +172,15 @@ const SmartTable = ({
                                 {action.label}
                               </CDropdownItem>
                             ))}
+                            {dataType === 'ta' && (
+                              <CDropdownItem onClick={() => setShowModal(true)}>
+                                View Certificate
+                              </CDropdownItem>
+                            )}
                           </CDropdownMenu>
                         </CDropdown>
                       </CTableDataCell>
-                    )
+                    ),
                   )}
                 </CTableRow>
               ))
@@ -175,6 +195,24 @@ const SmartTable = ({
               </CTableRow>
             )}
           </CTableBody>
+          <CModal
+            visible={showModal}
+            onClose={() => setShowModal(false)}
+            aria-labelledby="LiveDemoExampleLabel"
+          >
+            <CModalHeader>
+              <CModalTitle id="LiveDemoExampleLabel">Modal title</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <p>Woohoo, you're reading this text in a modal!</p>
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setShowModal(false)}>
+                Close
+              </CButton>
+              <CButton color="primary">Save changes</CButton>
+            </CModalFooter>
+          </CModal>
         </CTable>
 
         <div>

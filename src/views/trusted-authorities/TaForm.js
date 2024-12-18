@@ -54,16 +54,33 @@ const CreateTa = ({ mode }) => {
         id,
       })
 
-      if (response.status == 201) {
-        addToast('Success', `Trusted authority created successfully`, 'success')
-        return
-      } else {
-        addToast('Error', `Trusted authority creation failed`, 'error')
+      if (response.status === 400) {
+        // Handle the case where the server responds with a 400 status code
+        addToast('Error', `Another trusted authority with same certificate already exists`, 'error')
+        console.log('already exists')
+        return // return early to prevent the following code from running
       }
-      // handleCancel()
+
+      if (response.status === 201) {
+        // Successfully created the trusted authority
+        addToast('Success', `Trusted authority created successfully`, 'success')
+        navigate('/system/trusted-authorities')
+        return
+      }
+
+      // This will catch any other response status code
+      addToast('Error', `Trusted authority creation failed`, 'error')
     } catch (error) {
-      // handleError(error)
-      console.log(error)
+      // Handle axios error (this is where 400 and other error codes are caught)
+      if (error.response) {
+        // If error is an axios error and we have a response from the server
+        console.log('Error Response:', error.response)
+        addToast('Error', `${error.response.data.errorMessage}`, 'error')
+      } else {
+        // For network errors or other issues that do not return a response
+        console.log('Error', error.message)
+        addToast('Error', `Error: ${error.message}`, 'error')
+      }
     }
   }
 
@@ -76,8 +93,8 @@ const CreateTa = ({ mode }) => {
 
       if (response) {
         setBase64Certificate(response.data.base64Certificate)
-        setDistinguishedName(response.data.caid)
-        setFriendlyName(response.data.subjectDn)
+        setDistinguishedName(response.data.subjectDn)
+        setFriendlyName(response.data.caid)
       }
 
       // Check if the file upload response was successful
@@ -135,6 +152,7 @@ const CreateTa = ({ mode }) => {
     try {
       const response = await axiosInstance.put(`/api/ta/${taId}`, {
         status,
+        base64Certificate,
       })
 
       if (response) {
@@ -151,6 +169,7 @@ const CreateTa = ({ mode }) => {
     } catch (error) {
       // handleError(error)
       console.log(error)
+      addToast('Error', `${error.response.data.errorMessage}`, 'error')
     }
   }
 
@@ -257,13 +276,13 @@ const CreateTa = ({ mode }) => {
             </CCol>
           </CRow>
 
-          {mode.label === 'Create' && (
+          {(mode.label === 'Edit' || mode.label === 'Create') && (
             <CRow className="mb-3">
               <CFormLabel className="col-sm-2 col-form-label">Ta Certificate</CFormLabel>
               <CCol sm={3}>
                 <CFormInput
                   type="file"
-                  disabled={isViewMode || isEditMode}
+                  disabled={!mode.label === 'Create' || !mode.label === 'Edit'}
                   // value={username}
                   onChange={(e) => {
                     const file = e.target.files[0]
@@ -316,9 +335,7 @@ const CreateTa = ({ mode }) => {
                 <CButton
                   type="submit"
                   onClick={() => {
-                    isInsertMode &&
-                      createTa(base64Certificate) &&
-                      navigate('/system/trusted-authorities')
+                    isInsertMode && createTa(base64Certificate)
                   }}
                   color="primary"
                   disabled={loading}
