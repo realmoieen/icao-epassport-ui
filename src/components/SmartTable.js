@@ -32,6 +32,7 @@ import CIcon from '@coreui/icons-react'
 import { cilOptions } from '@coreui/icons'
 import { AxiosError } from 'axios'
 import { useToaster } from 'src/services/ToasterService'
+import { useNavigate } from "react-router-dom";
 
 // const cellStyle = {
 //   width: '150px', // Fixed width for all cells
@@ -50,6 +51,7 @@ const SmartTable = ({
   heading,
   dataType, // Added dataType prop to distinguish between 'user' and 'ta'
 }) => {
+  const navigate = useNavigate()
   const { addToast } = useToaster()
   const [data, setData] = useState([])
   const [totalPages, setTotalPages] = useState(0)
@@ -107,7 +109,7 @@ const SmartTable = ({
   }
 
   const handleActionClick = (link) => {
-    window.location.href = link
+    navigate(link)
   }
 
   // Dynamically determine which field to filter based on dataType ('user' or 'ta')
@@ -245,6 +247,7 @@ SmartTable.propTypes = {
   actions: PropTypes.array,
   defaultPageSize: PropTypes.number,
   searchParam: PropTypes.string,
+  heading: PropTypes.string,
   url: PropTypes.string,
   dataType: PropTypes.oneOf(['user', 'ta']), // dataType is passed as a prop to distinguish user and ta data
 }

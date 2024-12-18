@@ -13,12 +13,13 @@ import CIcon from '@coreui/icons-react'
 import { useToaster } from 'src/services/ToasterService'
 import axiosInstance from 'src/utils/axiosInstance'
 import { useSelector } from 'react-redux'
+import LocalStorageService from 'src/services/localStorageService'
 
 const AppHeaderDropdown = () => {
   const { user } = useSelector((state) => state.user)
   const { addToast, handleError } = useToaster()
   // const [username, setUsername] = React.useState('')
-  const username = localStorage.getItem('username').trim()
+  const username = LocalStorageService.getItem('username')
 
   const getUser = async () => {
     try {
@@ -60,11 +61,7 @@ const AppHeaderDropdown = () => {
           height: '100%',
         }}
       >
-        <CDropdownToggle
-          placement="bottom-end"
-          className="py-0 pe-2"
-          caret={false}
-        >
+        <CDropdownToggle placement="bottom-end" className="py-0 pe-2" caret={false}>
           {/*<CAvatar src={avatar8} size="md" />*/}
           <CIcon icon={cilUser} />
           <CFormLabel>{username}</CFormLabel>

@@ -85,7 +85,8 @@ const Dashboard = () => {
                           </CCol>
                         ))}
                   </CRow>
-                  <CRow className='mt-3'>
+                  <hr />
+                  <CRow className="mt-3">
                     {data &&
                       Object.entries(data)
                         .slice(2, 4)
@@ -123,7 +124,6 @@ const Dashboard = () => {
                           </CCol>
                         ))}
                   </CRow>
-                  <hr />
                 </CCol>
               </CRow>
             </CCardBody>

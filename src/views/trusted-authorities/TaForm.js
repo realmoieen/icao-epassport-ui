@@ -33,6 +33,7 @@ const CreateTa = ({ mode }) => {
   const [friendlyName, setFriendlyName] = useState('')
   const [distinguishedName, setDistinguishedName] = useState('')
   const { addToast } = useToaster()
+  const { handleError } = useToaster()
   const isViewMode = mode === Mode.VIEW
   const isEditMode = mode === Mode.EDIT
   const isInsertMode = mode === Mode.INSERT
@@ -104,7 +105,7 @@ const CreateTa = ({ mode }) => {
       }
 
       // await setFileResponse(response.data)
-      addToast('Success', 'File uploaded successfully', 'success')
+      // addToast('Success', 'File uploaded successfully', 'success')
       // console.log(fileResponse)
 
       // Ensure the backend returns the base64Certificate data
@@ -223,15 +224,6 @@ const CreateTa = ({ mode }) => {
       handleError(error)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const handleError = (error) => {
-    if (error.response) {
-      const { errorCode, errorMessage } = error.response.data
-      addToast(errorCode, errorMessage, 'error')
-    } else {
-      addToast('Error', 'An unexpected error occurred. Reason: ' + error, 'error')
     }
   }
 

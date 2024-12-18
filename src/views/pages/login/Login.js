@@ -56,7 +56,7 @@ const Login = () => {
         // Store tokens in local storage
         LocalStorageService.setItem(ACCESS_TOKEN_KEY, accessToken)
         LocalStorageService.setItem(REFRESH_TOKEN_KEY, refreshToken)
-        localStorage.setItem('username', username.trim())
+        LocalStorageService.setItem('username', username.trim())
         // dispatch(setUser(username))
 
         // Redirect to dashboard
